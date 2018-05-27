@@ -126,4 +126,4 @@ if(command === `${prefix}volume`){
 
 });
 
-bot.login(botconfig.token);
+bot.login(process.env.BOT_TOKEN);
