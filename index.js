@@ -1,6 +1,5 @@
 const botconfig = require("./botconfig.json")
 
-
 const Discord = require("discord.js");
 const fs = require("fs");
 
@@ -71,8 +70,9 @@ bot.on('message', async message => {
   let cmd = bot.commands.get(command.slice(prefix.length));
   if(cmd) cmd.run(bot, message, args);
 
-
-if(command === `${prefix}play`) {
+//music commands
+//playt is back-up
+if(command === `${prefix}playt`) {
       //play
       if (!args[0]) {
          message.channel.send("Please specify a link");
@@ -95,11 +95,52 @@ if(command === `${prefix}play`) {
         play(connection, message);
       })
     }
-if(command === `${prefix}skip`) {
+
+if(command === `${prefix}play`){
+  let video = args.join(" ");
+
+  let data = search(video, opts)
+   .then(results => {
+     console.log(results[0].link);
+
+       //play
+       if (!video) {
+          message.channel.send("Please specify the name of the song");
+          return
+       }
+
+       if(!message.member.voiceChannel) {
+         message.channel.send("I think it may work better if you are in a voice channel!");
+       }
+
+       if(!servers[message.guild.id]) servers[message.guild.id] = {
+         queue: []
+       };
+
+       var server = servers[message.guild.id];
+
+       //const id = results[0].id;
+
+       //let vid = `https://www.youtube.com/results?search_query=${id}`
+
+       server.queue.push(results[0].link);
+       message.channel.send(`Added **${results[0].title}** to the queue.`);
+       if(!message.guild.voiceConnection) message.member.voiceChannel.join().then(function(connection) {
+         play(connection, message);
+         console.log(server.queue[0]);
+       })
+
+   })
+   .catch(error => {
+     console.log(error);
+   });
+
+}
+if(command === `${prefix}skip`){
   var server = servers[message.guild.id];
   if (server.dispatcher) server.dispatcher.end();
 }
-if(command === `${prefix}stop`) {
+if(command === `${prefix}stop`){
   var server = servers[message.guild.id];
 
   if(message.guild.voiceConnection) message.member.voiceChannel.leave();
@@ -127,4 +168,4 @@ if(command === `${prefix}volume`){
 
 });
 
-bot.login(process.env.BOT_TOKEN);
+bot.login(botconfig.token);
