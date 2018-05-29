@@ -10,7 +10,7 @@ bot.commands = new Discord.Collection();
 const search = require("youtube-search-promise");
 const opts = {
   maxResults: 1,
-  key: botconfig.googlekey
+  key: porcess.env.googlekey
 };
 
 const YTDL = require("ytdl-core");
@@ -168,4 +168,4 @@ if(command === `${prefix}volume`){
 
 });
 
-bot.login(botconfig.token);
+bot.login(process.env.BOT_TOKEN);
