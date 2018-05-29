@@ -10,7 +10,7 @@ bot.commands = new Discord.Collection();
 const search = require("youtube-search-promise");
 const opts = {
   maxResults: 1,
-  key: porcess.env.googlekey
+  key: process.env.googlekey
 };
 
 const YTDL = require("ytdl-core");
